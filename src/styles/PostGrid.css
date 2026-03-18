@@ -1,0 +1,9 @@
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+@media (max-width: 600px) {
+  .post-grid { grid-template-columns: repeat(2, 1fr); }
+}

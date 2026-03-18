@@ -1,0 +1,63 @@
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+
+.app-header {
+  background: #fff;
+  border-bottom: 1px solid #dbdbdb;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-logo {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: #262626;
+}
+
+.app-main {
+  flex: 1;
+  max-width: 935px;
+  margin: 0 auto;
+  padding: 20px;
+  width: 100%;
+}
+
+.status-message { text-align: center; padding: 40px; color: #8e8e8e; }
+.status-message.error { color: #ed4956; }
+
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: #8e8e8e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn-primary {
+  background: #0095f6;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-primary:disabled { opacity: 0.5; cursor: default; }
+
+.btn-ghost {
+  color: #262626;
+  border: 1px solid #dbdbdb;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+.btn-ghost:hover { background: #f5f5f5; }

@@ -1,0 +1,48 @@
+.image-framer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.image-frame {
+  width: 400px;
+  height: 400px;
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+  background: #efefef;
+  border-radius: 4px;
+  user-select: none;
+}
+
+.image-frame:active { cursor: grabbing; }
+
+.image-frame img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none;
+  pointer-events: none;
+}
+
+.scale-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 400px;
+  font-size: 13px;
+  color: #8e8e8e;
+}
+
+.scale-control input[type="range"] { flex: 1; }
+
+.framer-hint {
+  font-size: 12px;
+  color: #a8a8a8;
+}
+
+@media (max-width: 500px) {
+  .image-frame { width: 100%; height: auto; aspect-ratio: 1; }
+  .scale-control { width: 100%; }
+}

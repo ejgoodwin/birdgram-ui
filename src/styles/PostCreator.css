@@ -1,0 +1,83 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.modal-header h2 { font-size: 16px; font-weight: 600; }
+
+.btn-close {
+  font-size: 18px;
+  color: #8e8e8e;
+  padding: 4px;
+  line-height: 1;
+}
+.btn-close:hover { color: #262626; }
+
+.creator-form {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.upload-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #dbdbdb;
+  border-radius: 8px;
+  padding: 60px 20px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.upload-area:hover { border-color: #0095f6; }
+
+.upload-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #8e8e8e;
+  font-size: 14px;
+}
+
+.upload-icon { font-size: 40px; }
+
+.form-field { display: flex; flex-direction: column; gap: 6px; }
+.form-field label { font-size: 13px; font-weight: 600; color: #262626; }
+.form-field input {
+  border: 1px solid #dbdbdb;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-field input:focus { border-color: #a8a8a8; }
+
+.form-error { color: #ed4956; font-size: 13px; }
+
+.form-actions { display: flex; justify-content: flex-end; gap: 10px; }
