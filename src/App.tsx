@@ -34,6 +34,10 @@ export default function App() {
     setPosts((prev) => prev.filter((p) => p.id !== id));
   };
 
+  const handleUpdated = (updated: Post) => {
+    setPosts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+  };
+
   return (
     <div className="app">
       <header className="app-header">
@@ -54,7 +58,7 @@ export default function App() {
             </button>
           </div>
         )}
-        {posts.length > 0 && <PostGrid posts={posts} onDelete={handleDelete} />}
+        {posts.length > 0 && <PostGrid posts={posts} onDelete={handleDelete} onUpdated={handleUpdated} />}
       </main>
 
       {showCreator && (
