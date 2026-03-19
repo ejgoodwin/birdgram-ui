@@ -9,9 +9,10 @@ interface Props {
   scale: number;
   onOffsetChange: (offset: { x: number; y: number }) => void;
   onScaleChange: (scale: number) => void;
+  autoFit?: boolean;
 }
 
-export default function ImageFramer({ src, offset, scale, onOffsetChange, onScaleChange }: Props) {
+export default function ImageFramer({ src, offset, scale, onOffsetChange, onScaleChange, autoFit = true }: Props) {
   const frameRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const dragState = useRef<{ startX: number; startY: number; startOffsetX: number; startOffsetY: number } | null>(null);
@@ -22,10 +23,12 @@ export default function ImageFramer({ src, offset, scale, onOffsetChange, onScal
     if (!img) return;
     setImgNaturalSize({ w: img.naturalWidth, h: img.naturalHeight });
 
-    // Auto-fit: scale so the image covers the frame
-    const minScale = Math.max(FRAME_SIZE / img.naturalWidth, FRAME_SIZE / img.naturalHeight);
-    onScaleChange(Math.max(minScale, 1));
-    onOffsetChange({ x: 0, y: 0 });
+    if (autoFit) {
+      // Auto-fit: scale so the image covers the frame
+      const minScale = Math.max(FRAME_SIZE / img.naturalWidth, FRAME_SIZE / img.naturalHeight);
+      onScaleChange(Math.max(minScale, 1));
+      onOffsetChange({ x: 0, y: 0 });
+    }
   };
 
   const clampOffset = useCallback((x: number, y: number, currentScale: number) => {

@@ -51,6 +51,7 @@ export default function PostEditor({ post, onClose, onUpdated }: Props) {
             scale={scale}
             onOffsetChange={setOffset}
             onScaleChange={setScale}
+            autoFit={false}
           />
 
           <div className="form-field">
