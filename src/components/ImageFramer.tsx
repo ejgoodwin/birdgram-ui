@@ -103,8 +103,13 @@ export default function ImageFramer({ src, offset, scale, onOffsetChange, onScal
 
   const handleScaleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newScale = parseFloat(e.target.value);
+    // Find the image coordinate at the frame center, then re-anchor it there at the new scale
+    const centerImgX = (FRAME_SIZE / 2 - offset.x) / scale;
+    const centerImgY = (FRAME_SIZE / 2 - offset.y) / scale;
+    const newOffsetX = FRAME_SIZE / 2 - centerImgX * newScale;
+    const newOffsetY = FRAME_SIZE / 2 - centerImgY * newScale;
     onScaleChange(newScale);
-    onOffsetChange(clampOffset(offset.x, offset.y, newScale));
+    onOffsetChange(clampOffset(newOffsetX, newOffsetY, newScale));
   };
 
   const minScale = imgNaturalSize.w > 0
