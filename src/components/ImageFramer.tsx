@@ -26,7 +26,7 @@ export default function ImageFramer({ src, offset, scale, onOffsetChange, onScal
     if (autoFit) {
       // Auto-fit: scale so the image covers the frame
       const minScale = Math.max(FRAME_SIZE / img.naturalWidth, FRAME_SIZE / img.naturalHeight);
-      onScaleChange(Math.max(minScale, 1));
+      onScaleChange(minScale);
       onOffsetChange({ x: 0, y: 0 });
     }
   };
