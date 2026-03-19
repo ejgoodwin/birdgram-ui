@@ -11,15 +11,6 @@
   background: #efefef;
 }
 
-.post-card-image-frame img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  min-width: 100%;
-  min-height: 100%;
-  max-width: none;
-  object-fit: cover;
-}
 
 .post-card-title {
   padding: 6px 4px 2px;
