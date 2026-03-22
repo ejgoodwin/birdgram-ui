@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PostGrid from './components/PostGrid';
 import PostCreator from './components/PostCreator';
+import ProfileSection from './components/ProfileSection';
 import { Post } from './types';
+import { Profile } from './types/profile';
 import { fetchPosts, deletePost } from './api/posts';
+import { fetchProfile } from './api/profile';
 import './styles/App.css';
 
 export default function App() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [showCreator, setShowCreator] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,7 +26,10 @@ export default function App() {
     }
   }, []);
 
-  useEffect(() => { loadPosts(); }, [loadPosts]);
+  useEffect(() => {
+    loadPosts();
+    fetchProfile().then(setProfile).catch(() => {});
+  }, [loadPosts]);
 
   const handlePostCreated = (post: Post) => {
     setPosts((prev) => [post, ...prev]);
@@ -48,6 +55,13 @@ export default function App() {
       </header>
 
       <main className="app-main">
+        {profile && (
+          <ProfileSection
+            profile={profile}
+            postCount={posts.length}
+            onUpdated={setProfile}
+          />
+        )}
         {loading && <p className="status-message">Loading...</p>}
         {error && <p className="status-message error">{error}</p>}
         {!loading && posts.length === 0 && (
