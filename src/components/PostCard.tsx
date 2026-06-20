@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { Post } from '../types';
 import PostEditor from './PostEditor';
 import '../styles/PostCard.css';
-
-const FRAMER_SIZE = 400;
 
 interface Props {
   post: Post;
@@ -14,65 +12,56 @@ interface Props {
 export default function PostCard({ post, onDelete, onUpdated }: Props) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [editing, setEditing] = useState(false);
-  const frameRef = useRef<HTMLDivElement>(null);
-  const [frameSize, setFrameSize] = useState(FRAMER_SIZE);
 
-  useEffect(() => {
-    const el = frameRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(([entry]) => setFrameSize(entry.contentRect.width));
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
-  const scaleFactor = frameSize / FRAMER_SIZE;
+  const frameH = post.frameH ?? 400;
 
   return (
     <>
-      <div className="post-card">
-        <div className="post-card-image-frame" ref={frameRef}>
-          <div
+      <div className='post-card'>
+        <div
+          className='post-card-image-frame'
+          style={{ aspectRatio: `400 / ${frameH}` }}
+        >
+          <img
+            src={post.imageUrl}
+            alt={post.title}
             style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: FRAMER_SIZE,
-              height: FRAMER_SIZE,
-              transform: `scale(${scaleFactor})`,
-              transformOrigin: 'top left',
-              overflow: 'hidden',
+              objectFit: 'cover',
+              width: '100%',
+              height: '100%',
             }}
-          >
-            <img
-              src={post.imageUrl}
-              alt={post.title}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                maxWidth: 'none',
-                width: 'auto',
-                height: 'auto',
-                transform: `translate(${post.offsetX}px, ${post.offsetY}px) scale(${post.scale})`,
-                transformOrigin: 'top left',
-              }}
-              draggable={false}
-            />
-          </div>
+            draggable={false}
+          />
         </div>
-        {post.title && <p className="post-card-title">{post.title}</p>}
-        <div className="post-card-actions">
-          {confirmDelete ? (
+        {post.title && <p className='post-card-title'>{post.title}</p>}
+        <div className='post-card-actions'>
+          {confirmDelete ?
             <>
-              <button className="btn-danger-sm" onClick={() => onDelete(post.id)}>Confirm</button>
-              <button className="btn-ghost-sm" onClick={() => setConfirmDelete(false)}>Cancel</button>
+              <button
+                className='btn-danger-sm'
+                onClick={() => onDelete(post.id)}
+              >
+                Confirm
+              </button>
+              <button
+                className='btn-ghost-sm'
+                onClick={() => setConfirmDelete(false)}
+              >
+                Cancel
+              </button>
             </>
-          ) : (
-            <>
-              <button className="btn-ghost-sm" onClick={() => setEditing(true)}>Edit</button>
-              <button className="btn-ghost-sm" onClick={() => setConfirmDelete(true)}>Delete</button>
+          : <>
+              <button className='btn-ghost-sm' onClick={() => setEditing(true)}>
+                Edit
+              </button>
+              <button
+                className='btn-ghost-sm'
+                onClick={() => setConfirmDelete(true)}
+              >
+                Delete
+              </button>
             </>
-          )}
+          }
         </div>
       </div>
 
@@ -80,7 +69,10 @@ export default function PostCard({ post, onDelete, onUpdated }: Props) {
         <PostEditor
           post={post}
           onClose={() => setEditing(false)}
-          onUpdated={(updated) => { onUpdated(updated); setEditing(false); }}
+          onUpdated={(updated) => {
+            onUpdated(updated);
+            setEditing(false);
+          }}
         />
       )}
     </>
