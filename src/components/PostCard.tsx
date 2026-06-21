@@ -13,20 +13,21 @@ export default function PostCard({ post, onDelete, onUpdated }: Props) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [editing, setEditing] = useState(false);
 
-  const frameH = post.frameH ?? 400;
-
   return (
     <>
       <div className='post-card'>
         <div
           className='post-card-image-frame'
-          style={{ aspectRatio: `400 / ${frameH}` }}
+          style={{ aspectRatio: `400 / ${post.frameH ?? 400}` }}
         >
           <img
             src={post.imageUrl}
             alt={post.title}
             style={{
               objectFit: 'cover',
+              objectPosition: `${post.objectPositionX ?? 50}% ${post.objectPositionY ?? 50}%`,
+              transform: `scale(${post.zoom ?? 1})`,
+              transformOrigin: `${post.objectPositionX ?? 50}% ${post.objectPositionY ?? 50}%`,
               width: '100%',
               height: '100%',
             }}

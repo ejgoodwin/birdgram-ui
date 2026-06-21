@@ -19,7 +19,7 @@ export async function createPost(formData: FormData): Promise<Post> {
 
 export async function updatePost(
   id: string,
-  data: { title: string; offsetX: number; offsetY: number; scale: number; frameH: number }
+  data: { title: string; objectPositionX: number; objectPositionY: number; zoom: number; frameH: number }
 ): Promise<Post> {
   const res = await fetch(`${BASE_URL}/${id}`, {
     method: 'PATCH',

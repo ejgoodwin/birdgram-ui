@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ImageFramer from './ImageFramer';
 import { updatePost } from '../api/posts';
 import { Post } from '../types';
-import { AspectRatioKey, FRAME_W, RATIO_LABELS, RATIO_ORDER, computeFrameH, frameHToRatio } from '../utils/aspectRatio';
+import { AspectRatioKey, RATIO_LABELS, RATIO_ORDER, computeFrameH, frameHToRatio } from '../utils/aspectRatio';
 import '../styles/PostCreator.css';
 
 interface Props {
@@ -13,8 +13,9 @@ interface Props {
 
 export default function PostEditor({ post, onClose, onUpdated }: Props) {
   const [title, setTitle] = useState(post.title);
-  const [offset, setOffset] = useState({ x: post.offsetX, y: post.offsetY });
-  const [scale, setScale] = useState(post.scale);
+  const [posX, setPosX] = useState(post.objectPositionX ?? 50);
+  const [posY, setPosY] = useState(post.objectPositionY ?? 50);
+  const [zoom, setZoom] = useState(post.zoom ?? 1);
   const [aspectRatio, setAspectRatio] = useState<AspectRatioKey>(() => frameHToRatio(post.frameH ?? 400));
   const [naturalSize, setNaturalSize] = useState<{ w: number; h: number } | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -30,11 +31,9 @@ export default function PostEditor({ post, onClose, onUpdated }: Props) {
 
   const handleRatioChange = (ratio: AspectRatioKey) => {
     setAspectRatio(ratio);
-    if (!naturalSize) return;
-    const fH = computeFrameH(ratio, naturalSize);
-    const minScale = Math.max(FRAME_W / naturalSize.w, fH / naturalSize.h);
-    setScale(minScale);
-    setOffset({ x: 0, y: 0 });
+    setPosX(50);
+    setPosY(50);
+    setZoom(1);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,9 +43,9 @@ export default function PostEditor({ post, onClose, onUpdated }: Props) {
     try {
       const updated = await updatePost(post.id, {
         title,
-        offsetX: offset.x,
-        offsetY: offset.y,
-        scale,
+        objectPositionX: posX,
+        objectPositionY: posY,
+        zoom,
         frameH,
       });
       onUpdated(updated);
@@ -80,12 +79,12 @@ export default function PostEditor({ post, onClose, onUpdated }: Props) {
           </div>
           <ImageFramer
             src={post.imageUrl}
-            offset={offset}
-            scale={scale}
+            posX={posX}
+            posY={posY}
+            zoom={zoom}
             frameH={frameH}
-            onOffsetChange={setOffset}
-            onScaleChange={setScale}
-            autoFit={false}
+            onPosChange={(x, y) => { setPosX(x); setPosY(y); }}
+            onZoomChange={setZoom}
           />
 
           <div className="form-field">

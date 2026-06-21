@@ -2,9 +2,9 @@ export interface Post {
   id: string;
   title: string;
   imageUrl: string;
-  offsetX: number;
-  offsetY: number;
-  scale: number;
+  objectPositionX: number;
+  objectPositionY: number;
+  zoom: number;
   frameH: number;
   createdAt: string;
 }

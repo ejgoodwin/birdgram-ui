@@ -9,7 +9,7 @@ export const RATIO_LABELS: Record<AspectRatioKey, string> = {
   'original': 'Original',
 };
 
-export const RATIO_ORDER: AspectRatioKey[] = ['1:1', '4:5', '16:9', 'original'];
+export const RATIO_ORDER: AspectRatioKey[] = ['1:1', '4:5', '16:9'];
 
 export function computeFrameH(ratio: AspectRatioKey, nat: { w: number; h: number } | null): number {
   if (!nat || nat.w === 0) return FRAME_W;

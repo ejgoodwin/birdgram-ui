@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ImageFramer from './ImageFramer';
 import { createPost } from '../api/posts';
 import { Post } from '../types';
-import { AspectRatioKey, FRAME_W, RATIO_LABELS, RATIO_ORDER, computeFrameH } from '../utils/aspectRatio';
+import { AspectRatioKey, RATIO_LABELS, RATIO_ORDER, computeFrameH } from '../utils/aspectRatio';
 import '../styles/PostCreator.css';
 
 interface Props {
@@ -16,8 +16,9 @@ export default function PostCreator({ onClose, onCreated }: Props) {
   const [naturalSize, setNaturalSize] = useState<{ w: number; h: number } | null>(null);
   const [aspectRatio, setAspectRatio] = useState<AspectRatioKey>('1:1');
   const [title, setTitle] = useState('');
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const [scale, setScale] = useState(1);
+  const [posX, setPosX] = useState(50);
+  const [posY, setPosY] = useState(50);
+  const [zoom, setZoom] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,8 +31,9 @@ export default function PostCreator({ onClose, onCreated }: Props) {
     const url = URL.createObjectURL(selected);
     setPreviewUrl(url);
     setNaturalSize(null);
-    setOffset({ x: 0, y: 0 });
-    setScale(1);
+    setPosX(50);
+    setPosY(50);
+    setZoom(1);
     const img = new window.Image();
     img.onload = () => setNaturalSize({ w: img.naturalWidth, h: img.naturalHeight });
     img.src = url;
@@ -39,11 +41,9 @@ export default function PostCreator({ onClose, onCreated }: Props) {
 
   const handleRatioChange = (ratio: AspectRatioKey) => {
     setAspectRatio(ratio);
-    if (!naturalSize) return;
-    const fH = computeFrameH(ratio, naturalSize);
-    const minScale = Math.max(FRAME_W / naturalSize.w, fH / naturalSize.h);
-    setScale(minScale);
-    setOffset({ x: 0, y: 0 });
+    setPosX(50);
+    setPosY(50);
+    setZoom(1);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -56,9 +56,9 @@ export default function PostCreator({ onClose, onCreated }: Props) {
       const formData = new FormData();
       formData.append('image', file);
       formData.append('title', title);
-      formData.append('offsetX', String(offset.x));
-      formData.append('offsetY', String(offset.y));
-      formData.append('scale', String(scale));
+      formData.append('objectPositionX', String(posX));
+      formData.append('objectPositionY', String(posY));
+      formData.append('zoom', String(zoom));
       formData.append('frameH', String(frameH));
       const post = await createPost(formData);
       onCreated(post);
@@ -102,11 +102,12 @@ export default function PostCreator({ onClose, onCreated }: Props) {
               </div>
               <ImageFramer
                 src={previewUrl}
-                offset={offset}
-                scale={scale}
+                posX={posX}
+                posY={posY}
+                zoom={zoom}
                 frameH={frameH}
-                onOffsetChange={setOffset}
-                onScaleChange={setScale}
+                onPosChange={(x, y) => { setPosX(x); setPosY(y); }}
+                onZoomChange={setZoom}
               />
               <button
                 type="button"

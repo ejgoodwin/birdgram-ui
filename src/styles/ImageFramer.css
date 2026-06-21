@@ -18,10 +18,7 @@
 .image-frame:active { cursor: grabbing; }
 
 .image-frame img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  max-width: none;
+  display: block;
   pointer-events: none;
 }
 
