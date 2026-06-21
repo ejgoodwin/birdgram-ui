@@ -5,5 +5,6 @@ export interface Post {
   offsetX: number;
   offsetY: number;
   scale: number;
+  frameH: number;
   createdAt: string;
 }

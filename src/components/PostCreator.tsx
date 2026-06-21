@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ImageFramer from './ImageFramer';
 import { createPost } from '../api/posts';
 import { Post } from '../types';
+import { AspectRatioKey, FRAME_W, RATIO_LABELS, RATIO_ORDER, computeFrameH } from '../utils/aspectRatio';
 import '../styles/PostCreator.css';
 
 interface Props {
@@ -12,19 +13,37 @@ interface Props {
 export default function PostCreator({ onClose, onCreated }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [naturalSize, setNaturalSize] = useState<{ w: number; h: number } | null>(null);
+  const [aspectRatio, setAspectRatio] = useState<AspectRatioKey>('1:1');
   const [title, setTitle] = useState('');
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [scale, setScale] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const frameH = computeFrameH(aspectRatio, naturalSize);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (!selected) return;
     setFile(selected);
-    setPreviewUrl(URL.createObjectURL(selected));
+    const url = URL.createObjectURL(selected);
+    setPreviewUrl(url);
+    setNaturalSize(null);
     setOffset({ x: 0, y: 0 });
     setScale(1);
+    const img = new window.Image();
+    img.onload = () => setNaturalSize({ w: img.naturalWidth, h: img.naturalHeight });
+    img.src = url;
+  };
+
+  const handleRatioChange = (ratio: AspectRatioKey) => {
+    setAspectRatio(ratio);
+    if (!naturalSize) return;
+    const fH = computeFrameH(ratio, naturalSize);
+    const minScale = Math.max(FRAME_W / naturalSize.w, fH / naturalSize.h);
+    setScale(minScale);
+    setOffset({ x: 0, y: 0 });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -40,6 +59,7 @@ export default function PostCreator({ onClose, onCreated }: Props) {
       formData.append('offsetX', String(offset.x));
       formData.append('offsetY', String(offset.y));
       formData.append('scale', String(scale));
+      formData.append('frameH', String(frameH));
       const post = await createPost(formData);
       onCreated(post);
     } catch {
@@ -68,17 +88,30 @@ export default function PostCreator({ onClose, onCreated }: Props) {
             </label>
           ) : (
             <>
+              <div className="ratio-selector">
+                {RATIO_ORDER.map((key) => (
+                  <button
+                    key={key}
+                    type="button"
+                    className={`ratio-btn${aspectRatio === key ? ' active' : ''}`}
+                    onClick={() => handleRatioChange(key)}
+                  >
+                    {RATIO_LABELS[key]}
+                  </button>
+                ))}
+              </div>
               <ImageFramer
                 src={previewUrl}
                 offset={offset}
                 scale={scale}
+                frameH={frameH}
                 onOffsetChange={setOffset}
                 onScaleChange={setScale}
               />
               <button
                 type="button"
                 className="btn-ghost"
-                onClick={() => { setFile(null); setPreviewUrl(null); }}
+                onClick={() => { setFile(null); setPreviewUrl(null); setNaturalSize(null); }}
               >
                 Choose different photo
               </button>

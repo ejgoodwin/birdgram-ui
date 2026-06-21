@@ -7,7 +7,6 @@
 
 .image-frame {
   width: 400px;
-  height: 400px;
   overflow: hidden;
   position: relative;
   cursor: grab;
@@ -43,6 +42,6 @@
 }
 
 @media (max-width: 500px) {
-  .image-frame { width: 100%; height: auto; aspect-ratio: 1; }
+  .image-frame { width: 100%; }
   .scale-control { width: 100%; }
 }

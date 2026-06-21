@@ -81,3 +81,27 @@
 .form-error { color: #ed4956; font-size: 13px; }
 
 .form-actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+.ratio-selector {
+  display: flex;
+  gap: 6px;
+}
+
+.ratio-btn {
+  flex: 1;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #dbdbdb;
+  border-radius: 6px;
+  color: #8e8e8e;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.ratio-btn:hover { border-color: #a8a8a8; color: #262626; }
+
+.ratio-btn.active {
+  border-color: #0095f6;
+  color: #0095f6;
+  background: #f0f8ff;
+}
